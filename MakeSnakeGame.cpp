@@ -22,10 +22,21 @@ public:
 int main() {
   srand(time(NULL));
   initscr();
+
+  start_color();
+  //팔레트 설정
+  init_pair(1, COLOR_BLACK, COLOR_CYAN);
+  init_pair(2, COLOR_YELLOW, COLOR_GREEN);
+
+  bkgd(COLOR_PAIR(1));
+  attron(COLOR_PAIR(2));
+  border('*','*','*','*','*','*','*','*');
+  attroff(COLOR_PAIR(2));
+
   noecho();
   curs_set(0);    //화면에 보이는 커서 설정, 0 : 커서 안보이게
   keypad(stdscr, true);
-  timeout(200);
+  timeout(200);    //수가 클 수록 느리게 작을수록 빠르게 이동
 
   list<Snake> snakes;
   list<Snake>::iterator it;
