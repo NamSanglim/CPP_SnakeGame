@@ -36,7 +36,7 @@ int main() {
   noecho();
   curs_set(0);    //화면에 보이는 커서 설정, 0 : 커서 안보이게
   keypad(stdscr, true);
-  timeout(200);    //수가 클 수록 느리게 작을수록 빠르게 이동
+  timeout(200);    //수가 클 수록 느리게 작을수록 빠르게 이동, 틱
 
   list<Snake> snakes;
   list<Snake>::iterator it;
@@ -55,16 +55,16 @@ int main() {
     ch = getch();
     switch (ch) {
       case KEY_LEFT:
-        if(dir!='2') dir = '1';
+        dir = '1';
         break;
       case KEY_RIGHT:
-        if(dir !='1') dir = '2';
+        dir = '2';
         break;
       case KEY_UP:
-        if(dir != '3') dir = '4';
+        dir = '4';
         break;
       case KEY_DOWN:
-        if(dir!='4') dir = '3';
+        dir = '3';
         break;
       case KEY_BACKSPACE:
          quit = true;
@@ -89,7 +89,7 @@ int main() {
     else
       snakes.pop_back();
 
-    if(y > 50 || x > 50 || y < -50 || x < -50) //충족되지 않으면 quit = false유지 되어 게임 끝, 다시 말해 벽에 닿으면 게임 끝
+    if(y > 50 || x > 50 || y < -50 || x < -50) //충족되지 않으면 quit = true 되어 게임 끝, 다시 말해 벽에 닿으면 게임 끝
       quit = true;
     erase();
     mvaddch(foodY, foodX, 'X');
