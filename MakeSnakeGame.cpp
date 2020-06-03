@@ -89,7 +89,8 @@ int main() {
     else
       snakes.pop_back();
 
-    if(y > 11 || x > 29 || y < 0 || x < -1) quit = true;
+    if(y > 50 || x > 50 || y < -50 || x < -50) //충족되지 않으면 quit = false유지 되어 게임 끝, 다시 말해 벽에 닿으면 게임 끝
+      quit = true;
     erase();
     mvaddch(foodY, foodX, 'X');
     for(it = snakes.begin(); it != snakes.end();it++){
