@@ -1,3 +1,3 @@
-# CPP_SnakeGame
+## CPP_SnakeGame
 
 Create a SnakeGame with ncurses
