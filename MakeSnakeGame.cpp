@@ -76,12 +76,10 @@ int main() {
     x += logic.getX();
     y += logic.getY(); //head 부분 좌표
 
-    if(dir == 1) --x;       //move to left
-    else if(dir == 2) ++x;  //move to right
-    else if(dir == 3) --y;  //move to down
-    else if(dir == 4) ++y;  //move to up
-
-    snakes.push_front(Snake(x, y)); // head 바꿔주기
+    if(dir == 1) x--;       //move to left
+    else if(dir == 2) x++;  //move to right
+    else if(dir == 3) y--;  //move to down
+    else if(dir == 4) y++;  //move to up
 
     if(x == foodX && y == foodY){
       foodX = rand() % 29;
@@ -91,10 +89,13 @@ int main() {
     else if(x==poisonX && y==poisonY){
       poisonX = rand() % 29;
       poisonY = rand() % 10;
-      //뱀사이즈 1 줄이는 코드 작성하기
+      snakes.pop_back();
+      snakes.pop_back(); // poison 만나면 tail 잘린다.
     }
     else
       snakes.pop_back(); // 좌표다 못맞추었을 때 tail자름.
+
+    snakes.push_front(Snake(x, y)); // head 바꿔주기
 
     //if(y > 11 || x > 29 || y < 0 || x < -1) quit = true;
     erase(); // snake의 개수 유지하고 출력해주도록 지워주기
