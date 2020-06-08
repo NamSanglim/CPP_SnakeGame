@@ -33,8 +33,7 @@ int main() {
   bool quit = false;
   int point = 0; //게임이 끝났을 때 최종 점수.
   int dir = 2; // 처음에는 무조건 오른쪽으로 간다.
-  int end_dir = 0;
-  int x_dir = 0;
+  int end_dir = 0; // tail방향의 방향키 입력 감지
   int foodX = rand()%29 +1;
   int foodY = rand()%10 +1; //최종도착지 좌표. 랜덤으로 정해진다.
   int ch; //방향키 입력 받기
@@ -43,7 +42,6 @@ int main() {
     snakes.push_front(Snake(3+i, 3)); // 처음 snake의 좌표. 3개
 
   while(!quit){
-    x_dir = dir;
     ch = getch();
     switch (ch) {
       case KEY_LEFT:
@@ -67,11 +65,9 @@ int main() {
         break;
     } // dir값 지정하기 위한 switch-case문. 방향키를 입력받아 적용시키기 위함이다.
 
-    switch(end_dir){
-      case 1:
+    if(end_dir == 1)
       quit = true;
-      break;
-    }
+
     int x = 0, y = 0;
     Snake logic = snakes.front();
     x += logic.getX();
