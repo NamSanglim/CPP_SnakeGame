@@ -36,6 +36,8 @@ int main() {
   int end_dir = 0; // tail방향의 방향키 입력 감지
   int foodX = rand()%29 +1;
   int foodY = rand()%10 +1; //최종도착지 좌표. 랜덤으로 정해진다.
+  int poisonX = rand()%29 +1;
+  int poisonY = rand()%10 +1;
   int ch; //방향키 입력 받기
 
   for(int i = 0; i < 3; i++)
@@ -85,14 +87,20 @@ int main() {
       foodY = rand() % 10;
       point++; // 목표 맞췄다면 다시 목표 설정하고 point 1점씩 증가.
     }
+    else if(x==poisonX && y==poisonY){
+      poisonX = rand() % 29;
+      poisonY = rand() % 10;
+      snakes.pop_back();
+    }
     else
       snakes.pop_back(); // 좌표다 못맞추었을 때 tail자름.
 
     //if(y > 11 || x > 29 || y < 0 || x < -1) quit = true;
     erase(); // snake의 개수 유지하고 출력해주도록 지워주기
-    mvaddch(foodY, foodX, 'X'); // 목표지점 출력
+    mvaddch(foodY, foodX, 'O'); // 목표지점 출력
+    mvaddch(poisonY, poisonX, 'X');
     for(it = snakes.begin(); it != snakes.end();it++){
-      mvaddch((*it).getY(), (*it).getX(), 'o'); // snake 출력
+      mvaddch((*it).getY(), (*it).getX(), '*'); // snake 출력
       //if((*it).getY()==y && (*it).getX()==x && it!=snakes.begin()) quit= true;
     }
     mvprintw(0, 0, "You got %i points. 'q' to quit.\n", point);
