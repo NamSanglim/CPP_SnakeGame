@@ -95,6 +95,8 @@ int main() {
     else
       snakes.pop_back(); // 좌표다 못맞추었을 때 tail자름.
 
+
+
     snakes.push_front(Snake(x, y)); // head 바꿔주기
 
     //if(y > 11 || x > 29 || y < 0 || x < -1) quit = true;
@@ -106,6 +108,9 @@ int main() {
       //if((*it).getY()==y && (*it).getX()==x && it!=snakes.begin()) quit= true;
     }
     mvprintw(0, 0, "You got %i points. 'q' to quit.\n", point);
+
+    if(snakes.size() < 3) quit = true;  //뱀 길이 3보다 작으면 종료
+
     refresh();
   }
   timeout(-1);
