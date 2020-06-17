@@ -36,9 +36,8 @@ public:
 int main() {
   WINDOW* GameBoard;  //게임이 진행되는 창
   WINDOW* ScoreBoard; //점수가 보여지는 창
-  WINDOW* MissionBoard; //
+  WINDOW* MissionBoard; //미션 창
 
-  srand(time(NULL));
   initscr();
   //resize_term(100, 100);
   noecho();
@@ -46,29 +45,32 @@ int main() {
   keypad(stdscr, true);
   timeout(200);
   start_color();
-  init_pair(1, COLOR_BLUE, COLOR_YELLOW);
+  init_pair(1, COLOR_BLACK, COLOR_YELLOW);
 
   list<Snake> snakes;
   list<Snake>::iterator it;
 
   vector<Gate> gate;
 
-  clock_t start, end;
+  clock_t start, end;   //GrowItem과 PoisonItem 위치 이동시키기 위한 시간계산
+  clock_t gameStartTime, gameEndTime;   //총 게임시간 측정
   bool quit = false;
-  int point = 0; //게임이 끝났을 때 최종 점수.
-  int GrowItem = 0;
-  int PoisonItem = 0;
+  int point = 0; //게임이 끝났을 때 최종 점수(GrowItem - PoisonItem).
+  int GrowItem = 0, PoisonItem = 0;
+  int UsingGate = 0;  //게이트 몇 번 사용했는지 개수 셀 변수
+
   int dir = 2; // 처음에는 무조건 오른쪽으로 간다.
   int end_dir = 0; // tail방향의 방향키 입력 감지
+
   int foodX = rand() % 38 + 1;
   int foodY = rand() % 38 + 1; //최종도착지 좌표. 랜덤으로 정해진다.
   int poisonX = rand() % 38 + 1;
   int poisonY = rand() % 38 + 1;
+
   int ch; //방향키 입력 받기
   int Ssize = 3;
-  int batchsec = 100000;
+  int batchsec = 100000;  //GrowItem과 PoisonItem 위치 이동시키기 위한 시간계산
   int sec = 10;
-  int gatecnt = 0;
 
   for(int i = 0; i < Ssize; i++)
     snakes.push_front(Snake(Ssize+i, Ssize)); // 처음 snake의 좌표. 3개
@@ -81,9 +83,9 @@ int main() {
   }
 
   end = clock();
+  gameStartTime = clock();
 
   while(!quit){
-
     ch = getch();
     switch (ch) {
       case KEY_LEFT:
@@ -107,8 +109,7 @@ int main() {
         break;
     } // dir값 지정하기 위한 switch-case문. 방향키를 입력받아 적용시키기 위함이다.
 
-    if(end_dir == 1)
-      quit = true;
+    if(end_dir == 1) quit = true;
 
     int x = 0, y = 0;
     Snake logic = snakes.front();
@@ -137,7 +138,7 @@ int main() {
       point++; // 목표 맞췄다면 다시 목표 설정하고 point 1점씩 증가.
       GrowItem++;
     }
-    else if(x==poisonX && y==poisonY){
+    else if(x == poisonX && y == poisonY){
       poisonX = rand() % 38 + 1;
       poisonY = rand() % 38 + 1;
       snakes.pop_back();
@@ -188,7 +189,7 @@ int main() {
         dir = 3;
         y--;
       }
-      }
+    }
     else
       snakes.pop_back(); // 좌표다 못맞추었을 때 tail자름.
 
@@ -201,7 +202,7 @@ int main() {
     wrefresh(GameBoard);
     start = clock();
 
-    if((start - end) >= batchsec){ // 5초쯤 정도마다 자리 바꿈
+    if((start - end) >= batchsec){ // 일정한 시간마다 아이템 위치 바꿈
       if((start - end) % batchsec >= 0 && (start - end) % batchsec <= 999){
         if(sec != ((start - end) / batchsec)){
           foodX = rand() % 38 + 1;
@@ -209,7 +210,7 @@ int main() {
           poisonX = rand() % 38 + 1;
           poisonY = rand() % 38 + 1;
           sec = (start - end) / batchsec;
-      }
+        }
       }
     }
 
@@ -219,7 +220,7 @@ int main() {
     }
     wrefresh(GameBoard);
     //ScoreBoard 설정
-    ScoreBoard = newwin(18, 25, 1, 45);
+    ScoreBoard = newwin(18, 30, 1, 45);
     wbkgd(ScoreBoard, COLOR_PAIR(1));
     wattron(ScoreBoard, COLOR_PAIR(1));
     wborder(ScoreBoard, '|', '|', '-', '-', '+', '+', '+', '+');
@@ -227,24 +228,32 @@ int main() {
     mvwprintw(ScoreBoard, 15, 1, "Total_Point : %i", point);
     mvwprintw(ScoreBoard, 3, 1, "GrowItem : %i", GrowItem);
     mvwprintw(ScoreBoard, 4, 1, "PoisonItem : %i", PoisonItem);
+    mvwprintw(ScoreBoard, 5, 1, "UsingGate : %i", PoisonItem);
     wrefresh(ScoreBoard);
     //MissionBoard 설정
-    MissionBoard = newwin(18, 25, 23, 45);
+    MissionBoard = newwin(18, 30, 23, 45);
     wbkgd(MissionBoard, COLOR_PAIR(1));
     wattron(MissionBoard, COLOR_PAIR(1));
     wborder(MissionBoard, '|', '|', '-', '-', '+', '+', '+', '+');
     mvwprintw(MissionBoard, 1, 1, "<< Mission >>");
+    mvwprintw(MissionBoard, 3, 1, "SnakeSize : ");
+    mvwprintw(MissionBoard, 4, 1, "Must get GrowItem : ");
+    mvwprintw(MissionBoard, 5, 1, "Don't get PoisonItem : ");
     wrefresh(MissionBoard);
 
     if(snakes.size() < 3) quit = true;  //뱀 길이 3보다 작으면 종료
-
   }
+  gameEndTime = clock();
+  //TotalGameTime = gameEndTime - gameStartTime;  //총 게임 실행 계산
   timeout(-1);
   erase();
-  mvprintw(1, 1, "You gained a total of %i points.\n", point);
+  mvprintw(1, 1, "You gained a total of %i points.\n", point);  //최종 점수 출력
+  //mvprintw(2, 1, "Game Run Time : %i\n", TotalGameTime);  //총 게임 실행시간 출력
   refresh();
   getch();
   delwin(GameBoard);
+  delwin(ScoreBoard);
+  delwin(MissionBoard);
   endwin();
   return 0;
 }
