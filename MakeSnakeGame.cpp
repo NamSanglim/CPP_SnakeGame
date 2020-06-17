@@ -39,7 +39,7 @@ int main() {
   WINDOW* MissionBoard; //미션 창
 
   initscr();
-  //resize_term(100, 100);
+  //resize_term(50, 50);
   noecho();
   curs_set(0);    //화면에 보이는 커서 설정, 0 : 커서 안보이게
   keypad(stdscr, true);
@@ -124,13 +124,17 @@ int main() {
     GameBoard = newwin(40, 40, 1, 1);
     wbkgd(GameBoard, COLOR_PAIR(1));
     wattron(GameBoard, COLOR_PAIR(1));
-    wborder(GameBoard, '#', '#', '#', '#', '#', '#', '#', '#');
+    wborder(GameBoard, '|', '|', '-', '-', '+', '+', '+', '+');
 
     int gaterand1 = 3;//rand() % 152;
     int gaterand2 = 10;//rand() % 152;
 
     mvwaddch(GameBoard, gate[gaterand1].getY(),gate[gaterand1].getX(), '!');
     mvwaddch(GameBoard, gate[gaterand2].getY(),gate[gaterand2].getX(), '!');
+
+    for(it = snakes.begin(); it != snakes.end();it++){
+      if(x == (*it).getX() && y == (*it).getY()) quit = true;
+    }
 
     if(x == foodX && y == foodY){
       foodX = rand() % 38 + 1;
@@ -236,9 +240,9 @@ int main() {
     wattron(MissionBoard, COLOR_PAIR(1));
     wborder(MissionBoard, '|', '|', '-', '-', '+', '+', '+', '+');
     mvwprintw(MissionBoard, 1, 1, "<< Mission >>");
-    mvwprintw(MissionBoard, 3, 1, "SnakeSize : ");
-    mvwprintw(MissionBoard, 4, 1, "Must get GrowItem : ");
-    mvwprintw(MissionBoard, 5, 1, "Don't get PoisonItem : ");
+    mvwprintw(MissionBoard, 5, 1, "SnakeSize : ");
+    mvwprintw(MissionBoard, 7, 1, "Must get GrowItem : ");
+    mvwprintw(MissionBoard, 9, 1, "Don't get PoisonItem : ");
     wrefresh(MissionBoard);
 
     if(snakes.size() < 3) quit = true;  //뱀 길이 3보다 작으면 종료
