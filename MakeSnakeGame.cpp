@@ -44,6 +44,8 @@ int main() {
   curs_set(0);    //화면에 보이는 커서 설정, 0 : 커서 안보이게
   keypad(stdscr, true);
   timeout(200);
+  srand((unsigned int)time(NULL));
+
   start_color();
   init_pair(1, COLOR_BLACK, COLOR_YELLOW);
 
@@ -66,6 +68,9 @@ int main() {
   int foodY = rand() % 38 + 1; //최종도착지 좌표. 랜덤으로 정해진다.
   int poisonX = rand() % 38 + 1;
   int poisonY = rand() % 38 + 1;
+
+  int gaterand1 = rand() % (40 + 1 - 3) + 3;
+  int gaterand2 = rand() % (40 + 1 - 3) + 3;
 
   int ch; //방향키 입력 받기
   int Ssize = 3;
@@ -126,11 +131,8 @@ int main() {
     wattron(GameBoard, COLOR_PAIR(1));
     wborder(GameBoard, '|', '|', '-', '-', '+', '+', '+', '+');
 
-    int gaterand1 = 3;//rand() % 152;
-    int gaterand2 = 10;//rand() % 152;
-
-    mvwaddch(GameBoard, gate[gaterand1].getY(),gate[gaterand1].getX(), '!');
-    mvwaddch(GameBoard, gate[gaterand2].getY(),gate[gaterand2].getX(), '!');
+    mvwaddch(GameBoard, gate[gaterand1].getY(),gate[gaterand1].getX(), '@');
+    mvwaddch(GameBoard, gate[gaterand2].getY(),gate[gaterand2].getX(), '@');
 
     for(it = snakes.begin(); it != snakes.end();it++){
       if(x == (*it).getX() && y == (*it).getY()) quit = true;
