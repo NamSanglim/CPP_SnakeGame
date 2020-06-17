@@ -69,8 +69,12 @@ int main() {
   int poisonX = rand() % 38 + 1;
   int poisonY = rand() % 38 + 1;
 
-  int gaterand1 = rand() % (37 + 1 - 3) + 3;
+  int gaterand1 = rand() % (37 + 1 - 3) + 3;    //3- 37 사이 랜덤값
   int gaterand2 = rand() % (37 + 1 - 3) + 3;
+
+  int MissionSnakesize = rand() % (20 + 1 - 5) + 5;     //미션 스네이크 사이즈
+  int MissionGrowitem = rand() % 20 + 1;      //미션 그로우 아이템 얻기
+  int MissionLimitedPoison = rand() % (5 + 1 - 3) + 3;  //포이즌 최대한계
 
   int ch; //방향키 입력 받기
   int Ssize = 3;
@@ -243,12 +247,13 @@ int main() {
     wattron(MissionBoard, COLOR_PAIR(1));
     wborder(MissionBoard, '|', '|', '-', '-', '+', '+', '+', '+');
     mvwprintw(MissionBoard, 1, 1, "<< Mission >>");
-    mvwprintw(MissionBoard, 5, 1, "SnakeSize : ");
-    mvwprintw(MissionBoard, 7, 1, "Must get GrowItem : ");
-    mvwprintw(MissionBoard, 9, 1, "Don't get PoisonItem : ");
+    mvwprintw(MissionBoard, 5, 1, "SnakeSize : %i / %i",snakes.size(), MissionSnakesize);
+    mvwprintw(MissionBoard, 6, 1, "Must get GrowItem : %i / %i",GrowItem, MissionGrowitem);
+    mvwprintw(MissionBoard, 9, 1, "Don't get PoisonItem : %i / %i",PoisonItem, MissionLimitedPoison);
     wrefresh(MissionBoard);
 
     if(snakes.size() < 3) quit = true;  //뱀 길이 3보다 작으면 종료
+    if(PoisonItem == MissionLimitedPoison) quit = true;   //최대 한계 포이즌보다 포이즌 더 많이 먹으면 게임 끝
   }
   gameEndTime = clock();
   //TotalGameTime = gameEndTime - gameStartTime;  //총 게임 실행 계산
