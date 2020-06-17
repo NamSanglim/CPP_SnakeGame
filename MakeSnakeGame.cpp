@@ -69,8 +69,8 @@ int main() {
   int poisonX = rand() % 38 + 1;
   int poisonY = rand() % 38 + 1;
 
-  int gaterand1 = rand() % (40 + 1 - 3) + 3;
-  int gaterand2 = rand() % (40 + 1 - 3) + 3;
+  int gaterand1 = rand() % (37 + 1 - 3) + 3;
+  int gaterand2 = rand() % (37 + 1 - 3) + 3;
 
   int ch; //방향키 입력 받기
   int Ssize = 3;
@@ -231,10 +231,11 @@ int main() {
     wattron(ScoreBoard, COLOR_PAIR(1));
     wborder(ScoreBoard, '|', '|', '-', '-', '+', '+', '+', '+');
     mvwprintw(ScoreBoard, 1, 1, "<< Score Board >>");
+    mvwprintw(ScoreBoard, 3, 1, "SnakeSize : %i", snakes.size());
+    mvwprintw(ScoreBoard, 5, 1, "GrowItem : %i", GrowItem);
+    mvwprintw(ScoreBoard, 6, 1, "PoisonItem : %i", PoisonItem);
+    mvwprintw(ScoreBoard, 7, 1, "UsingGate : %i", PoisonItem);
     mvwprintw(ScoreBoard, 15, 1, "Total_Point : %i", point);
-    mvwprintw(ScoreBoard, 3, 1, "GrowItem : %i", GrowItem);
-    mvwprintw(ScoreBoard, 4, 1, "PoisonItem : %i", PoisonItem);
-    mvwprintw(ScoreBoard, 5, 1, "UsingGate : %i", PoisonItem);
     wrefresh(ScoreBoard);
     //MissionBoard 설정
     MissionBoard = newwin(18, 30, 23, 45);
@@ -251,9 +252,11 @@ int main() {
   }
   gameEndTime = clock();
   //TotalGameTime = gameEndTime - gameStartTime;  //총 게임 실행 계산
-  timeout(-1);
+  //timeout(-1);
   erase();
-  mvprintw(1, 1, "You gained a total of %i points.\n", point);  //최종 점수 출력
+  mvprintw(5, 1, "Your Total_Point : %i", point);  //최종 점수 출력
+  mvprintw(1, 1, "You gained a total of %i GrowItem.", GrowItem);
+  mvprintw(2, 1, "You gained a total of %i PoisonItem.", PoisonItem);
   //mvprintw(2, 1, "Game Run Time : %i\n", TotalGameTime);  //총 게임 실행시간 출력
   refresh();
   getch();
