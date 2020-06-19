@@ -33,6 +33,19 @@ public:
   int getY(){return y;}
 };
 
+class Wall{
+private:
+  int x;
+  int y;
+public:
+  Wall(int a, int b){
+    x = a;
+    y = b;
+  }
+  int getX(){return x;}
+  int getY(){return y;}
+};
+
 int main() {
   WINDOW* GameBoard;  //게임이 진행되는 창
   WINDOW* ScoreBoard; //점수가 보여지는 창
@@ -53,6 +66,7 @@ int main() {
   list<Snake>::iterator it;
 
   vector<Gate> gate;
+  vector<Wall> wall;
 
   clock_t start, end;   //GrowItem과 PoisonItem 위치 이동시키기 위한 시간계산
   clock_t gameStartTime, gameEndTime;   //총 게임시간 측정
@@ -83,6 +97,13 @@ int main() {
 
   for(int i = 0; i < Ssize; i++)
     snakes.push_front(Snake(Ssize+i, Ssize)); // 처음 snake의 좌표. 3개
+
+  for(int i = 15; i < 22; i++){
+     wall.push_back(Wall(i, 20));
+   }
+  for(int i = 17; i < 21; i++){
+     wall.push_back(Wall(15, i));
+   }
 
   for(int i = 1; i < 39; i++){
     gate.push_back(Gate(0, i));
@@ -135,10 +156,14 @@ int main() {
     wattron(GameBoard, COLOR_PAIR(1));
     wborder(GameBoard, '|', '|', '-', '-', '+', '+', '+', '+');
 
+    for(int i = 0; i < 11; i++){
+       mvwaddch(GameBoard, wall[i].getY(), wall[i].getX(), 'E');
+    }
+
     mvwaddch(GameBoard, gate[gaterand1].getY(),gate[gaterand1].getX(), '@');
     mvwaddch(GameBoard, gate[gaterand2].getY(),gate[gaterand2].getX(), '@');
 
-    for(it = snakes.begin(); it != snakes.end();it++){
+    for(it = snakes.begin(); it != snakes.end();it++){    //Snake가 자신의 body에 닿으면 실패
       if(x == (*it).getX() && y == (*it).getY()) quit = true;
     }
 
@@ -177,6 +202,7 @@ int main() {
         dir = 3;
         y--;
       }
+      UsingGate++;
     }
     else if(x == gate[gaterand2].getX() && y == gate[gaterand2].getY()){
       snakes.pop_back();
@@ -199,6 +225,7 @@ int main() {
         dir = 3;
         y--;
       }
+      UsingGate++;
     }
     else
       snakes.pop_back(); // 좌표다 못맞추었을 때 tail자름.
@@ -238,7 +265,7 @@ int main() {
     mvwprintw(ScoreBoard, 3, 1, "SnakeSize : %i", snakes.size());
     mvwprintw(ScoreBoard, 5, 1, "GrowItem : %i", GrowItem);
     mvwprintw(ScoreBoard, 6, 1, "PoisonItem : %i", PoisonItem);
-    mvwprintw(ScoreBoard, 7, 1, "UsingGate : %i", PoisonItem);
+    mvwprintw(ScoreBoard, 7, 1, "UsingGate : %i", UsingGate);
     mvwprintw(ScoreBoard, 15, 1, "Total_Point : %i", point);
     wrefresh(ScoreBoard);
     //MissionBoard 설정
