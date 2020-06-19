@@ -67,6 +67,7 @@ int main() {
 
   vector<Gate> gate;
   vector<Wall> wall;
+  vector<Wall>::iterator wit;
 
   clock_t start, end;   //GrowItem과 PoisonItem 위치 이동시키기 위한 시간계산
   clock_t gameStartTime, gameEndTime;   //총 게임시간 측정
@@ -168,6 +169,10 @@ int main() {
 
     for(it = snakes.begin(); it != snakes.end();it++){    //Snake가 자신의 body에 닿으면 실패
       if(x == (*it).getX() && y == (*it).getY()) quit = true;
+    }
+
+    for(wit = wall.begin(); wit != wall.end(); wit++){    //생선된 벽에 닿아도 실패
+      if(x == (*wit).getX() && y == (*wit).getY()) quit = true;
     }
 
     if(x == foodX && y == foodY){
