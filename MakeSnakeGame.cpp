@@ -86,24 +86,27 @@ int main() {
   int gaterand1 = rand() % (37 + 1 - 3) + 3;    //3- 37 사이 랜덤값
   int gaterand2 = rand() % (37 + 1 - 3) + 3;
 
+  int wallrand = rand() % (30 + 1 - 15) + 15;
+  //int wallrand2 = rand() % (30 + 1 - 15) + 15;
+
   int MissionSnakesize = rand() % (20 + 1 - 5) + 5;     //미션 스네이크 사이즈
   int MissionGrowitem = rand() % 20 + 1;      //미션 그로우 아이템 얻기
   int MissionLimitedPoison = rand() % (5 + 1 - 3) + 3;  //포이즌 최대한계
 
   int ch; //방향키 입력 받기
   int Ssize = 3;
-  int batchsec = 100000;  //GrowItem과 PoisonItem 위치 이동시키기 위한 시간계산
+  int batchsec = 30000;  //GrowItem과 PoisonItem 위치 이동시키기 위한 시간계산
   int sec = 10;
 
   for(int i = 0; i < Ssize; i++)
     snakes.push_front(Snake(Ssize+i, Ssize)); // 처음 snake의 좌표. 3개
 
   for(int i = 15; i < 22; i++){
-     wall.push_back(Wall(i, 20));
+     wall.push_back(Wall(i, wallrand));
    }
-  for(int i = 17; i < 21; i++){
-     wall.push_back(Wall(15, i));
-   }
+  //for(int i = 17; i < 21; i++){
+  //   wall.push_back(Wall(15, i));
+  //}
 
   for(int i = 1; i < 39; i++){
     gate.push_back(Gate(0, i));
@@ -156,7 +159,7 @@ int main() {
     wattron(GameBoard, COLOR_PAIR(1));
     wborder(GameBoard, '|', '|', '-', '-', '+', '+', '+', '+');
 
-    for(int i = 0; i < 11; i++){
+    for(int i = 0; i < wall.size(); i++){
        mvwaddch(GameBoard, wall[i].getY(), wall[i].getX(), 'E');
     }
 
